@@ -26,11 +26,11 @@ def audio_to_millisecond_amplitude(audio_path):
 
     return amplitudes
 
-def detect_transients(data):
+def detect_transients(data, threshold=-25):
     transients = []
     i = 1
     while i < len(data):
-        if data[i]['amplitude'] > -200:
+        if data[i]['amplitude'] > threshold:
             transients.append({'time': data[i]['time'], 'amplitude': data[i]['amplitude']})
         i += 1
     
@@ -38,5 +38,5 @@ def detect_transients(data):
 
 amplitudes = audio_to_millisecond_amplitude(AUDIO_PATH)
 transients = detect_transients(amplitudes)
-files.write(transients)
+files.write({'waveform': amplitudes, 'transients': transients})
 print(transients)

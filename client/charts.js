@@ -37,10 +37,10 @@ const createChart = (domainLower, domainUpper, length) => {
     .call(d3.axisLeft(y));
 };
 
-const createPoints = (data) => {
+const createWaveform = (data) => {
   svg
     .append("path")
-    .datum(data)
+    .datum(data.waveform)
     .attr("fill", "none")
     .attr("stroke", "steelblue")
     .attr("stroke-width", 0.4)
@@ -57,4 +57,16 @@ const createPoints = (data) => {
     );
 };
 
-export { createChart, createPoints };
+export const createPoints = (data) => {
+    svg
+      .selectAll("circle")
+      .data(data.transients)
+      .enter()
+      .append("circle")
+      .attr("cx", (d) => x(d.time)) // Use 'time' for the x position
+      .attr("cy", (d) => y(d.amplitude)) // Use 'amplitude' for the y position
+      .attr("r", 1) // Radius of the circle
+      .attr("fill", 'red')
+}
+
+export { createChart, createWaveform};

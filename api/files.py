@@ -2,8 +2,9 @@ import json
 import os
 from datetime import datetime
 
-os.makedirs('api/outputs', exist_ok=True)
-file_name = os.path.join('api/outputs', datetime.now().strftime("%Y%m%d_%H%M%S") + '.json')
+# os.makedirs('api/outputs', exist_ok=True)
+# file_name = os.path.join('api/outputs', datetime.now().strftime("%Y%m%d_%H%M%S") + '.json')
+file_name = os.path.join('api/outputs', 'output' + '.json')
 
 def write(data):
     with open(file_name, "w") as json_file:
