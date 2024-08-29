@@ -11,4 +11,3 @@ def write(data):
         json.dump(data, json_file, indent=4)
     print('File has been saved as ' + file_name)
     
-write([1, 2, 3, 4, 5])

@@ -10,7 +10,6 @@ const createChart = (domainLower, domainUpper, length) => {
   const marginBottom = 30;
   const marginLeft = 40;
 
-
   x = d3
     .scaleLinear()
     .domain([0, length]) // Set the x-axis domain from 0 to 12000
@@ -18,7 +17,7 @@ const createChart = (domainLower, domainUpper, length) => {
 
   y = d3
     .scaleLinear()
-    .domain([(domainLower > -120 ? domainLower : -120), domainUpper])
+    .domain([domainLower > -120 ? domainLower : -120, domainUpper])
     .range([height - marginBottom, marginTop]);
 
   svg = d3.create("svg").attr("width", width).attr("height", height);
@@ -48,6 +47,7 @@ const createWaveform = (data) => {
       "d",
       d3
         .line()
+        .curve(d3.curveBasis)
         .x(function (d) {
           return x(d.time);
         })
@@ -58,15 +58,30 @@ const createWaveform = (data) => {
 };
 
 export const createPoints = (data) => {
-    svg
-      .selectAll("circle")
-      .data(data.transients)
-      .enter()
-      .append("circle")
-      .attr("cx", (d) => x(d.time)) // Use 'time' for the x position
-      .attr("cy", (d) => y(d.amplitude)) // Use 'amplitude' for the y position
-      .attr("r", 1) // Radius of the circle
-      .attr("fill", 'red')
-}
+  svg
+    .selectAll("circle")
+    .data(data.transients)
+    .enter()
+    .append("circle")
+    .attr("cx", (d) => x(d.time)) // Use 'time' for the x position
+    .attr("cy", (d) => y(d.amplitude)) // Use 'amplitude' for the y position
+    .attr("r", 1) // Radius of the circle
+    .attr("fill", "red")
+    .on("mouseover", function (event, d) {
+      svg
+        .append("text")
+        .attr("id", "hover-text")
+        .attr("x", x(d.time) + 10) // Adjust the x position of the text
+        .attr("y", y(d.amplitude) - 10) // Adjust the y position of the text
+        .attr("text-anchor", "middle")
+        .attr("font-size", "12px")
+        .attr("fill", "black")
+        .text(`Time: ${d.time}ms Amplitude: ${d.amplitude}`);
+    })
+    .on("mouseout", function (event, d) {
+      // Remove the hover text
+      svg.select("#hover-text").remove();
+    });
+};
 
-export { createChart, createWaveform};
+export { createChart, createWaveform };
